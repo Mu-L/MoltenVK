@@ -1938,7 +1938,7 @@ void MVKGraphicsPipeline::addFragmentOutputToPipeline(MTLRenderPipelineDescripto
 					plDesc.logicOperationMVK = mvkMTLLogicOperationFromVkLogicOp(pCreateInfo->pColorBlendState->logicOp);
 				}
 #endif
-            } else if (mtlPixFmt && !supportsBlend) {
+            } else if (mtlPixFmt && !supportsBlend && pCA->blendEnable) {
                 reportWarning(VK_ERROR_FEATURE_NOT_PRESENT, "Blending is enabled for attachment with format %s, which does not support it.", getPixelFormats()->getName(attachFmt));
             }
         }
