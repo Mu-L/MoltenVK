@@ -645,7 +645,7 @@ void MVKCmdDrawIndexed::encode(MVKCommandEncoder* cmdEncoder) {
 // there are at encoding time. And this will probably be inadequate for large instanced draws.
 // TODO: Consider breaking up such draws using different base instance values. But this will
 // require yet more munging of the indirect buffers...
-static const uint32_t kMVKMaxDrawIndirectVertexCount = 128 * KIBI;
+static const uint32_t kMVKMaxDrawIndirectVertexCount = 1024 * KIBI;
 
 static const MVKMTLBufferAllocation* encodeIndirectCountConversion(
 		MVKCommandEncoder* cmdEncoder,
@@ -1389,7 +1389,7 @@ void MVKCmdDrawIndexedIndirect::encode(MVKCommandEncoder* cmdEncoder, const MVKI
                 state.bindBuffer(mtlTessCtlEncoder, vtxIndexBuff->_mtlBuffer, vtxIndexBuff->_offset, 1);
                 state.bindBuffer(mtlTessCtlEncoder, indirectBuffer,            mtlIndBuffOfst,        2);
                 [mtlTessCtlEncoder dispatchThreadgroupsWithIndirectBuffer: mtlIndBuff
-													 indirectBufferOffset: mtlTempIndBuffOfst
+													 indirectBufferOffset: mtlTempIndBuffOfst + sizeof(MTLStageInRegionIndirectArguments)
                                                     threadsPerThreadgroup: MTLSizeMake(vtxThreadExecWidth, 1, 1)];
 				mtlIndBuffOfst += sizeof(MTLDrawIndexedPrimitivesIndirectArguments);
             } else if (drawIdx == 0 && vtxAdjmts.needsAdjustment()) {
